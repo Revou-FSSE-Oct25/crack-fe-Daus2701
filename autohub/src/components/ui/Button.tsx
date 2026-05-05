@@ -1,21 +1,23 @@
 type ButtonProps = {
   children: React.ReactNode;
-  variant?: "primary" | "outline";
+  onClick?: () => void;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 };
 
-export default function Button({ children, variant = "primary" }: ButtonProps) {
-  const base = "px-6 py-3 rounded font-medium transition";
-
-  const styles = {
-    primary:
-      "bg-[var(--color-primary)] text-white hover:opacity-90",
-
-    outline:
-      "border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white",
-  };
-
+export default function Button({
+  children,
+  onClick,
+  type = "button",
+  disabled = false,
+}: ButtonProps) {
   return (
-    <button className={`${base} ${styles[variant]}`}>
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className="w-full bg-[var(--color-primary)] text-white py-3 rounded disabled:opacity-50"
+    >
       {children}
     </button>
   );

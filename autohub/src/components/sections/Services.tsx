@@ -24,10 +24,14 @@ export default function Services() {
         {services.map((service, index) => (
           <div
             key={index}
-            className="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer"
+            className="bg-white p-8 rounded-xl shadow hover:shadow-xl hover:-translate-y-1 transition duration-300"
           >
-            <div className="text-4xl mb-4">
-              {service.icon}
+            <div className="w-14 h-14 flex items-center justify-center rounded-full bg-[var(--color-primary)]/10 mb-4 mx-auto">
+
+              <span className="text-2xl text-[var(--color-primary)]">
+                {service.icon}
+              </span>
+
             </div>
 
             <h3 className="font-semibold text-lg">
