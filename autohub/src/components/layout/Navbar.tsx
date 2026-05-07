@@ -1,6 +1,18 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem("autohubUser");
+
+    setIsLoggedIn(!!user);
+  }, []);
+
+
   return (
     <nav className="flex justify-between items-center px-10 py-5 shadow-md">
       
@@ -16,19 +28,44 @@ export default function Navbar() {
       </ul>
 
       <div className="flex gap-4">
-        <Link
-          href="/login"
-          className="px-4 py-2 border rounded-md"
-        >
-          Login
-        </Link>
 
-        <Link
-          href="/signup"
-          className="px-4 py-2 bg-orange-500 text-white rounded-md"
-        >
-          Sign Up
-        </Link>
+        {isLoggedIn ? (
+          <>
+            <Link
+              href="/dashboard"
+              className="px-4 py-2 border rounded-md"
+            >
+              Dashboard
+            </Link>
+
+            <button
+              onClick={() => {
+                localStorage.removeItem("autohubUser");
+                window.location.reload();
+              }}
+              className="px-4 py-2 bg-red-500 text-white rounded-md"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="px-4 py-2 border rounded-md"
+            >
+              Login
+            </Link>
+
+            <Link
+              href="/signup"
+              className="px-4 py-2 bg-orange-500 text-white rounded-md"
+            >
+              Sign Up
+            </Link>
+          </>
+        )}
+
       </div>
 
     </nav>
