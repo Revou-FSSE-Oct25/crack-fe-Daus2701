@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
@@ -165,78 +166,6 @@ export default function DashboardPage() {
 
         </div>
 
-        {/* BOOKING FORM */}
-        <div className="bg-white p-6 rounded-2xl shadow-md mb-8">
-
-            <h2 className="text-2xl font-semibold mb-4">
-                Book New Service
-            </h2>
-
-            <div className="grid md:grid-cols-3 gap-4">
-
-                <select
-                    value={newBooking.service}
-                    onChange={(e) =>
-                        setNewBooking({
-                            ...newBooking,
-                            service: e.target.value,
-                        })
-                    }
-                    className="border p-3 rounded-lg"
-                >
-
-                    <option value="">
-                        Select Service
-                    </option>
-
-                    {services.map((service) => (
-                        <option
-                            key={service.name}
-                            value={service.name}
-                        >
-                            {service.name}
-                        </option>
-                    ))}
-
-                </select>
-
-                    {
-                        newBooking.service && (
-                            <p className="text-sm text-gray-600 mt-2">
-                                Estimated Price:{" "}
-                                <span className="font-semibold text-orange-500">
-                                    RM{
-                                        services.find(
-                                            (s) => s.name === newBooking.service
-                                        )?.price
-                                    }
-                                </span>
-                            </p>
-                        )
-                    }
-
-                <input
-                    type="date"
-                    value={newBooking.date}
-                    onChange={(e) =>
-                        setNewBooking({
-                            ...newBooking,
-                            date: e.target.value,
-                        })
-                    }
-                    className="border p-3 rounded-lg"
-                />
-
-                <button
-                    onClick={handleBooking}
-                    className="bg-orange-500 text-white rounded-lg px-4"
-                >
-                    Add Booking
-                </button>
-
-            </div>
-
-        </div>
 
         {/* RECENT BOOKINGS */}
         <div className="bg-white mt-8 p-6 rounded-2xl shadow-md">
@@ -246,9 +175,12 @@ export default function DashboardPage() {
                     Recent Bookings
                 </h2>
 
-                <button className="bg-orange-500 text-white px-4 py-2 rounded-lg">
+                <Link
+                    href="/booking"
+                    className="bg-orange-500 text-white px-5 py-2 rounded-lg"
+                >
                     New Booking
-                </button>
+                </Link>
             </div>
 
             <div className="overflow-x-auto">
