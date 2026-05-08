@@ -20,7 +20,7 @@ export default function BookingPage() {
         },
         {
             name: "Tyre Change",
-            price: 780,
+            price: 200,
         },
         {
             name: "Battery Replacement",
@@ -28,13 +28,75 @@ export default function BookingPage() {
         },
     ];
 
-    const [selectedServices, setSelectedServices] = useState<string[]>([]);
+    const [cart, setCart] = useState<
+        {
+            name: string;
+            price: number;
+            quantity: number;
+        }[]
+    >([]);
 
-    const totalPrice = services
-        .filter((service) =>
-            selectedServices.includes(service.name)
-        )
-        .reduce((total, service) => total + service.price, 0);
+    const [bookingDate, setBookingDate] = useState("");
+    const [bookingTime, setBookingTime] = useState("");
+    const [successMessage, setSuccessMessage] =
+        useState("");
+
+    const totalPrice = cart.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+    );
+
+    const increaseQuantity = (name: string) => {
+        setCart(
+            cart.map((item) =>
+                item.name === name
+                    ? {
+                        ...item,
+                        quantity: item.quantity + 1,
+                    }
+                : item
+            )
+        );
+    };
+
+    const decreaseQuantity = (name: string) => {
+        setCart(
+            cart
+                .map((item) =>
+                    item.name === name
+                        ? {
+                            ...item,
+                            quantity: item.quantity - 1,
+                        }
+                    : item
+                )
+                .filter((item) => item.quantity > 0)
+        );
+    };
+
+    const handleBooking = () => {
+
+        if (cart.length === 0) {
+            alert("Please select at least one service.");
+            return;
+        }
+
+        if (!bookingDate || !bookingTime) {
+            alert("Please select appointment date and time.");
+            return;
+        }
+
+        setSuccessMessage(
+            "Booking confirmed successfully!"
+        );
+
+        console.log({
+            cart,
+            bookingDate,
+            bookingTime,
+            totalPrice,
+        });
+    };
 
   return (
     <>
@@ -58,8 +120,9 @@ export default function BookingPage() {
 
                 {services.map((service) => {
 
-                    const isSelected =
-                        selectedServices.includes(service.name);
+                    const isSelected = cart.some(
+                        (item) => item.name === service.name
+                    );
 
                     return (
                         <div
@@ -67,15 +130,19 @@ export default function BookingPage() {
                             onClick={() => {
 
                                 if (isSelected) {
-                                    setSelectedServices(
-                                        selectedServices.filter(
-                                            (s) => s !== service.name
+                                    setCart(
+                                        cart.filter(
+                                            (item) => item.name !== service.name
                                         )
                                     );
                                 } else {
-                                    setSelectedServices([
-                                        ...selectedServices,
-                                        service.name,
+                                    setCart([
+                                        ...cart,
+                                        {
+                                            name: service.name,
+                                            price: service.price,
+                                            quantity: 1,
+                                        },
                                     ]);
                                 }
 
@@ -108,7 +175,7 @@ export default function BookingPage() {
                     Booking Summary
                 </h2>
 
-                {selectedServices.length === 0 ? (
+                {cart.length === 0 ? (
                     <p className="text-gray-500">
                         No services selected yet.
                     </p>
@@ -116,24 +183,98 @@ export default function BookingPage() {
                     <>
                         <div className="space-y-3">
 
-                            {selectedServices.map((selected) => {
-                                const serviceData = services.find(
-                                    (service) => service.name === selected
-                                );
+                            {cart.map((item) => {
+                                
 
                                 return (
                                     <div
-                                        key={selected}
+                                        key={item.name}
                                         className="flex justify-between border-b pb-2"
                                     >
-                                        <span>{selected}</span>
+                                        <div>
+                                            <p>{item.name}</p>
+
+                                            <div className="flex items-center gap-3 mt-2">
+
+                                                <button
+                                                    onClick={() => decreaseQuantity(item.name)}
+                                                    className="px-2 py-1 bg-gray-200 rounded"
+                                                >
+                                                    -
+                                                </button>
+
+                                                <span className="text-sm">
+                                                    Qty: {item.quantity}
+                                                </span>
+
+                                                <button
+                                                    onClick={() => increaseQuantity(item.name)}
+                                                    className="px-2 py-1 bg-orange-500 text-white rounded"
+                                                >
+                                                    +
+                                                </button>
+
+                                            </div>
+                                        </div>
 
                                         <span className="font-semibold text-orange-500">
-                                            RM{serviceData?.price}
+                                            RM{item.price * item.quantity}
                                         </span>
                                     </div>
                                 );
                             })}
+
+                        </div>
+
+                        <div className="mt-8">
+
+                            <h3 className="text-xl font-bold mb-4">
+                                Appointment Details
+                            </h3>
+
+                            <div className="grid md:grid-cols-2 gap-4">
+
+                                <div>
+                                    <label className="block mb-2 font-medium">
+                                        Select Date
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        value={bookingDate}
+                                        onChange={(e) =>
+                                            setBookingDate(e.target.value)
+                                        }
+                                        className="w-full border rounded-lg p-3"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-2 font-medium">
+                                        Select Time
+                                    </label>
+
+                                    <select
+                                        value={bookingTime}
+                                        onChange={(e) =>
+                                            setBookingTime(e.target.value)
+                                        }
+                                        className="w-full border rounded-lg p-3"
+                                    >
+                                        <option value="">
+                                            Choose Time Slot
+                                        </option>
+
+                                        <option>09:00 AM</option>
+                                        <option>10:00 AM</option>
+                                        <option>11:00 AM</option>
+                                        <option>01:00 PM</option>
+                                        <option>02:00 PM</option>
+                                        <option>03:00 PM</option>
+                                    </select>
+                                </div>
+
+                            </div>
 
                         </div>
 
@@ -144,6 +285,21 @@ export default function BookingPage() {
                                 RM{totalPrice}
                             </span>
                         </div>
+
+                        <button
+                            onClick={handleBooking}
+                            className="w-full mt-6 bg-orange-500 hover:bg-orange-600
+                            text-white py-3 rounded-xl font-semibold transition"
+                        >
+                            Confirm Booking
+                        </button>
+
+                        {successMessage && (
+                            <p className="mt-4 text-green-600 font-medium">
+                                {successMessage}
+                            </p>
+                        )}
+
                     </>
                 )}
 
