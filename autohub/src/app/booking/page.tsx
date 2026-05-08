@@ -30,6 +30,12 @@ export default function BookingPage() {
 
     const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
+    const totalPrice = services
+        .filter((service) =>
+            selectedServices.includes(service.name)
+        )
+        .reduce((total, service) => total + service.price, 0);
+
   return (
     <>
       <Navbar />
@@ -96,7 +102,52 @@ export default function BookingPage() {
 
             </div>
 
-          
+          <div className="bg-white rounded-2xl shadow-md p-6 mt-10">
+
+                <h2 className="text-2xl font-bold mb-4">
+                    Booking Summary
+                </h2>
+
+                {selectedServices.length === 0 ? (
+                    <p className="text-gray-500">
+                        No services selected yet.
+                    </p>
+                ) : (
+                    <>
+                        <div className="space-y-3">
+
+                            {selectedServices.map((selected) => {
+                                const serviceData = services.find(
+                                    (service) => service.name === selected
+                                );
+
+                                return (
+                                    <div
+                                        key={selected}
+                                        className="flex justify-between border-b pb-2"
+                                    >
+                                        <span>{selected}</span>
+
+                                        <span className="font-semibold text-orange-500">
+                                            RM{serviceData?.price}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+
+                        </div>
+
+                        <div className="flex justify-between items-center mt-6 text-xl font-bold">
+                            <span>Total</span>
+
+                            <span className="text-orange-500">
+                                RM{totalPrice}
+                            </span>
+                        </div>
+                    </>
+                )}
+
+            </div>
 
         </div>
 
