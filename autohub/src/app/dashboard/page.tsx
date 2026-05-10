@@ -21,14 +21,15 @@ export default function DashboardPage() {
             service: "Oil Change",
             date: "12 May 2026",
             status: "Completed",
-            mechanic: "John",
+            mechanic: "Junaidi",
+            bill: 850,
         },
-
         {
             service: "Brake Inspection",
             date: "18 May 2026",
             status: "Upcoming",
-            mechanic: "Michael",
+            mechanic: "Mazlan",
+            bill: 480,
         },
     ]);
 
@@ -45,6 +46,7 @@ export default function DashboardPage() {
             date: newBooking.date,
             status: "Upcoming",
             mechanic: "Pending",
+            bill: 0,
         };
 
         setBookings([...bookings, booking]);
@@ -189,10 +191,11 @@ export default function DashboardPage() {
 
                     <thead>
                         <tr className="border-b">
-                            <th className="py-3">Service</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Mechanic</th>
+                            <th className="text-left py-3">Service</th>
+                            <th className="text-left py-3">Date</th>
+                            <th className="text-left py-3">Status</th>
+                            <th className="text-left py-3">Mechanic</th>
+                            <th className="text-left py-3">Last Bill</th>
                         </tr>
                     </thead>
 
@@ -221,6 +224,10 @@ export default function DashboardPage() {
 
                                 <td>
                                     {booking.mechanic}
+                                </td>
+
+                                <td className="py-4 font-semibold text-orange-500">
+                                    RM{booking.bill}
                                 </td>
 
                             </tr>
