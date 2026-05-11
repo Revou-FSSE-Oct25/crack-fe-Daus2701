@@ -1,27 +1,19 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 
 export default function AdminPage() {
 
-    const bookings = [
-        {
-            customer: "Firdaus",
-            service: "Oil Change",
-            date: "12 May 2026",
-            status: "Pending",
-            mechanic: "Not Assigned",
-            bill: 850,
-        },
-        {
-            customer: "Hakim",
-            service: "Brake Inspection",
-            date: "18 May 2026",
-            status: "Completed",
-            mechanic: "Mazlan",
-            bill: 480,
-        },
-    ];
+    const [bookings, setBookings] = useState<any[]>([]);
+
+    useEffect(() => {
+        const storedBookings = JSON.parse(
+            localStorage.getItem("bookings") || "[]"
+        );
+
+        setBookings(storedBookings);
+    }, []);
 
     const totalBookings = bookings.length;
 
@@ -39,6 +31,26 @@ export default function AdminPage() {
         (total, booking) => total + booking.bill,
         0
     );
+
+    const updateBooking = (
+        index: number,
+        field: string,
+        value: string
+    ) => {
+        const updatedBookings = [...bookings];
+
+        updatedBookings[index] = {
+            ...updatedBookings[index],
+            [field]: value,
+        };
+
+        setBookings(updatedBookings);
+
+        localStorage.setItem(
+            "bookings",
+            JSON.stringify(updatedBookings)
+        );
+    };
 
     return (
         <>
@@ -147,7 +159,10 @@ export default function AdminPage() {
                                                         ? "text-blue-500"
                                                         : "text-orange-500"
                                                 }`}
-                                                defaultValue={booking.status}
+                                                value={booking.status}
+                                                onChange={(e) =>
+                                                    updateBooking(index, "status", e.target.value)
+                                                }
                                             >
 
                                                 <option value="Pending">
@@ -170,7 +185,10 @@ export default function AdminPage() {
 
                                             <select
                                                 className="border rounded-lg px-3 py-1"
-                                                defaultValue={booking.mechanic}
+                                                value={booking.mechanic}
+                                                onChange={(e) =>
+                                                    updateBooking(index, "mechanic", e.target.value)
+                                                }
                                             >
 
                                                 <option value="Not Assigned">

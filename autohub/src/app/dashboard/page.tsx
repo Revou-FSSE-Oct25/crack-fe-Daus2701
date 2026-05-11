@@ -16,22 +16,15 @@ export default function DashboardPage() {
     }
   }, []);
 
-    const [bookings, setBookings] = useState([
-        {
-            service: "Oil Change",
-            date: "12 May 2026",
-            status: "Completed",
-            mechanic: "Junaidi",
-            bill: 850,
-        },
-        {
-            service: "Brake Inspection",
-            date: "18 May 2026",
-            status: "Upcoming",
-            mechanic: "Mazlan",
-            bill: 480,
-        },
-    ]);
+    const [bookings, setBookings] = useState<any[]>([]);
+
+    useEffect(() => {
+        const storedBookings = JSON.parse(
+            localStorage.getItem("bookings") || "[]"
+        );
+
+        setBookings(storedBookings);
+    }, []);
 
     const [newBooking, setNewBooking] = useState({
         service: "",
@@ -213,11 +206,13 @@ export default function DashboardPage() {
                                 </td>
 
                                 <td
-                                    className={
+                                    className={`font-semibold ${
                                         booking.status === "Completed"
-                                            ? "text-green-500 font-medium"
-                                            : "text-orange-500 font-medium"
-                                    }
+                                            ? "text-green-500"
+                                            : booking.status === "In Progress"
+                                            ? "text-blue-500"
+                                            : "text-orange-500"
+                                    }`}
                                 >
                                     {booking.status}
                                 </td>

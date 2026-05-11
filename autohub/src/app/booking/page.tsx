@@ -86,6 +86,24 @@ export default function BookingPage() {
             return;
         }
 
+        const existingBookings = JSON.parse(
+            localStorage.getItem("bookings") || "[]"
+        );
+
+        const newBookingData = {
+            customer: "Firdaus",
+            service: cart.map((item) => item.name).join(", "),
+            date: bookingDate,
+            status: "Pending",
+            mechanic: "Not Assigned",
+            bill: totalPrice,
+        };
+
+        localStorage.setItem(
+            "bookings",
+            JSON.stringify([...existingBookings, newBookingData])
+        );
+
         setSuccessMessage(
             "Booking confirmed successfully!"
         );
