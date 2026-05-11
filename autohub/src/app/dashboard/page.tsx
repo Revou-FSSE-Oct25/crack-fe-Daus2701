@@ -50,33 +50,6 @@ export default function DashboardPage() {
         });
     };
 
-    const services = [
-        {
-            name: "Oil Change",
-            price: 120,
-        },
-        {
-            name: "Tyre Change",
-            price: 780,
-        },
-        {
-            name: "Battery Replacement",
-            price: 250,
-        },
-        {
-            name: "Brake Inspection",
-            price: 100,
-        },
-        {
-            name: "AC Service",
-            price: 150,
-        },
-        {
-            name: "Engine Diagnostic",
-            price: 200,
-        },
-    ];
-
   return (
     <>
       <Navbar />
